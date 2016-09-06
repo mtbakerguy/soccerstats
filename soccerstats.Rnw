@@ -1,0 +1,302 @@
+\documentclass[a4paper]{article}
+\usepackage[linktoc=al]{hyperref}
+\usepackage{spverbatim}
+\usepackage{parskip}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\title{WFA Soccer Stats Report}
+\begin{document}
+\maketitle
+Report on the WFA soccer team.
+\pagebreak
+\tableofcontents
+\pagebreak
+\section{Data file format}
+\subsection{File Location}
+The incoming data file--\textit{soccerstats.csv}--is found in this directory.
+\subsection{File format}
+<<echo=FALSE>>=
+data <- read.csv('soccerstats.csv')
+
+# helper function that plots our metric vs theirs
+plotit <- function(d_u,d_t,title,ylabel) {
+   par(mar=c(16,3.8,2,0.1))
+   ylimit <- max(d_u,d_t)
+   plot(d_u,main=title,ylab=ylabel,xaxt='n',
+        xlab='',ylim=c(0,ylimit),col='blue',pch='U')
+   par(new=TRUE)
+   points(d_t,pch='T',col='red')
+   axis(1, at=1:length(d_u), labels=data$Opponent,las=2)
+} 
+@ 
+
+I have included a snippet from the data file below (it contains \Sexpr{length(data)} fields):
+\scriptsize
+\begin{verbatim}
+Opponent,Date,Weather,GameType,Field,1GU,1GO,2GU,2GO,1ShU,1ShO,2ShU,2ShO,1CU,1CO,2CU,2CO,1SaU,1SaO,2SaU,2SaO
+FC Surge Edmonds,6-Jun-2016,Breezy and overcast,Tournament,Turf -- good condition,5,0,2,1,15,1,6,7,0,1,0,2,1,6,3,2
+\end{verbatim}
+\normalsize
+Data dictionary for the \textit{CSV} file follows:
+\begin{table}[ht]
+\begin{tabular}{ l l l }
+\textbf{Field} & \textbf{Description} & \textbf{Type} \\
+\hline \\
+\textbf{Opponent} & Who did we play? & Freeform text \\
+\textbf{Date} & When did we play? & dd-mmm-YYYY (e.g. 12-Mar-2050) \\
+\textbf{Weather} & What was the weather like? & Freeform text \\
+\textbf{Gametype} & What kind of game was it? & Categorical data(\tiny{Friendly,Tournament,League,Grudge match}) \\
+\textbf{Field} & How was the field? & Freeform text \\
+\textbf{1GU} & 1st half goals us & whole number \textgreater= 0 \\
+\textbf{1GT} & 1st half goals them & whole number \textgreater= 0 \\
+\textbf{2GU} & 2nd half goals us & whole number \textgreater= 0 \\
+\textbf{2GT} & 2nd half goals them & whole number \textgreater= 0 \\
+\textbf{1ShU} & 1st half shots us & whole number \textgreater= 0 \\
+\textbf{1ShT} & 1st half shots them & whole number \textgreater= 0 \\
+\textbf{2ShU} & 2nd half shots us & whole number \textgreater= 0 \\
+\textbf{2ShT} & 2nd half shots them & whole number \textgreater= 0 \\
+\textbf{1CU} & 1st half corners us & whole number \textgreater= 0 \\
+\textbf{1CT} & 1st half corners them & whole number \textgreater= 0 \\
+\textbf{2CU} & 2nd half corners us & whole number \textgreater= 0 \\
+\textbf{2CT} & 2nd half corners them & whole number \textgreater= 0 \\
+\textbf{1SaU} & 1st half saves us & whole number \textgreater= 0 \\
+\textbf{1SaT} & 1st half saves them & whole number \textgreater= 0 \\
+\textbf{2SaU} & 2nd half saves us & whole number \textgreater= 0 \\
+\textbf{2SaT} & 2nd half saves them & whole number \textgreater= 0
+\end{tabular}
+\end{table}
+\pagebreak
+\section{Goals}
+\subsection{Halves}
+<<echo=FALSE,fig.height=11>>=
+par(mfrow=c(2,1))
+plotit(data$X1GU,data$X1GT,'1st half goals','Goals scored')
+plotit(data$X2GU,data$X2GT,'2nd half goals','Goals scored')
+@ 
+\pagebreak
+\subsection{Total}
+<<echo=FALSE,fig.height=11>>=
+plotit(data$X1GU + data$X2GU,data$X1GT + data$X2GT,
+       'Goals','Goals scored')
+@ 
+\pagebreak
+\section{Shots}
+\subsection{Haves}
+<<echo=FALSE,fig.height=11>>=
+par(mfrow=c(2,1))
+plotit(data$X1ShU,data$X1ShT,'1st half shots','Shots taken')
+plotit(data$X2ShU,data$X2ShT,'2nd half shots','Shots taken')
+@ 
+\pagebreak
+\pagebreak
+\subsection{Total}
+<<echo=FALSE,fig.height=11>>=
+plotit(data$X1ShU + data$X2ShU,data$X1ShT + data$X2ShT,
+       'Shots','Shots taken')
+@ 
+\pagebreak
+\section{Shot Efficiency}
+\subsection{Halves}
+<<echo=FALSE,fig.height=11>>=
+# handle dividing by zero (no shots in the half)
+# by converting NaN (not a number) to 0%
+f <- function (resultU,resultT,title,xlab) {
+    resultU[is.nan(resultU)] <- 0
+    resultT[is.nan(resultT)] <- 0
+    plotit(resultU,resultT,title,xlab)
+}
+par(mfrow=c(2,1))
+f(data$X1GU / data$X1ShU * 100,data$X1GT / data$X1ShT * 100,
+  '1st half shot efficiency','Conversion rate(%)')
+f(data$X2GU / data$X2ShU * 100,data$X2GT / data$X2ShT * 100,
+  '2nd half shot efficiency','Conversion rate(%)')
+@ 
+\pagebreak
+\subsection{Total}
+<<echo=FALSE,fig.height=11>>=
+f((data$X1GU + data$X2GU) / (data$X1ShU + data$X2ShU) * 100,
+  (data$X1GT + data$X2GT) / (data$X1ShT + data$X2ShT) * 100,
+  'Shot efficiency','Conversion rate(%)')
+@
+\pagebreak
+\section{Corners}
+\subsection{Halves}
+<<echo=FALSE,fig.height=11>>=
+par(mfrow=c(2,1))
+plotit(data$X1CU,data$X1CT,'1st half corners','Corners taken')
+plotit(data$X2CU,data$X2CT,'2nd half corners','Corners taken')
+@ 
+\pagebreak
+\subsection{Total}
+<<echo=FALSE,fig.height=11>>=
+plotit(data$X1CU + data$X2CU,data$X1CT + data$X2CT,
+       'Corners','Corners taken')
+@ 
+\pagebreak
+\section{Saves}
+\subsection{Halves}
+<<echo=FALSE,fig.height=11>>=
+par(mfrow=c(2,1))
+plotit(data$X1SaU,data$X1SaT,'1st half saves','Saves made')
+plotit(data$X2SaU,data$X2SaT,'2nd half saves','Saves made')
+@ 
+\pagebreak
+\subsection{Total}
+<<echo=FALSE,fig.height=11>>=
+plotit(data$X1SaU + data$X2SaU,data$X1SaT + data$X2SaT,
+       'Saves','Saves made')
+@
+\pagebreak
+<<echo=FALSE>>=
+mean1 <- function(data) round(mean(data),digits=1)
+median1 <- function(data) round(median(data),digits=1)
+@
+\pagebreak
+\section{Statistics}
+\begin{table}[ht]
+\begin{tabular}{ l r r r r r}
+\textbf{Metric} & \textbf{Mean} & \textbf{Median} & \textbf{Total} & \textbf{Min} & \textbf{Max} \\
+\hline \\
+1st half goals(us) & \Sexpr{mean1(data$X1GU)} & \Sexpr{median1(data$X1GU)} & \Sexpr{sum(data$X1GU)} & \Sexpr{min(data$X1GU)} & \Sexpr{max(data$X1GU)} \\
+2nd half goals(us) & \Sexpr{mean1(data$X2GU)} & \Sexpr{median1(data$X2GU)} & \Sexpr{sum(data$X2GU)} & \Sexpr{min(data$X2GU)} & \Sexpr{max(data$X2GU)}  \\
+Goals(us) & \Sexpr{mean1(data$X1GU + data$X2GU)} & \Sexpr{median1(data$X1GU + data$X2GU)} & \Sexpr{sum(data$X1GU + data$X2GU)}  & \Sexpr{min(data$X1GU + data$X2GU)} & \Sexpr{max(data$X1GU + data$X2GU)} \\
+\hline \\
+1st half goals(them)  & \Sexpr{mean1(data$X1GT)} & \Sexpr{median1(data$X1GT)} & \Sexpr{sum(data$X1GT)} & \Sexpr{min(data$X1GT)} & \Sexpr{max(data$X1GT)} \\
+2nd half goals(them)  & \Sexpr{mean1(data$X2GT)} & \Sexpr{median1(data$X2GT)} & \Sexpr{sum(data$X2GT)} & \Sexpr{min(data$X2GT)} & \Sexpr{max(data$X2GT)}  \\
+Goals(them)  & \Sexpr{mean1(data$X1GT + data$X2GT)} & \Sexpr{median1(data$X1GT + data$X2GT)} & \Sexpr{sum(data$X1GT + data$X2GT)} & \Sexpr{min(data$X1GT + data$X2GT)} & \Sexpr{max(data$X1GT + data$X2GT)} \\
+\hline \\
+1st half shots(us) & \Sexpr{mean1(data$X1ShU)} & \Sexpr{median1(data$X1ShU)} & \Sexpr{sum(data$X1ShU)} & \Sexpr{min(data$X1ShU)} & \Sexpr{max(data$X2ShU)} \\
+2nd half shots(us) & \Sexpr{mean1(data$X2ShU)} & \Sexpr{median1(data$X2ShU)} & \Sexpr{sum(data$X2ShU)} & \Sexpr{min(data$X2ShU)} & \Sexpr{max(data$X2ShU)}  \\
+Shots(us) & \Sexpr{mean1(data$X1ShU + data$X2ShU)} & \Sexpr{median1(data$X1ShU + data$X2ShU)} & \Sexpr{sum(data$X1ShU + data$X2ShU)} & \Sexpr{min(data$X1ShU + data$X2ShU)} & \Sexpr{max(data$X1ShU + data$X2ShU)} \\
+\hline \\
+1st half shots(them) & \Sexpr{mean1(data$X1ShT)} & \Sexpr{median1(data$X1ShT)} & \Sexpr{sum(data$X1ShT)} & \Sexpr{min(data$X1ShT)} & \Sexpr{max(data$X1ShT)} \\
+2nd half shots(them) & \Sexpr{mean1(data$X2ShT)} & \Sexpr{median1(data$X2ShT)} & \Sexpr{sum(data$X2ShT)} & \Sexpr{min(data$X2ShT)} & \Sexpr{max(data$X2ShT)} \\
+Shots(them) & \Sexpr{mean1(data$X1ShT + data$X2ShT)} & \Sexpr{median1(data$X1ShT + data$X2ShT)} & \Sexpr{sum(data$X1ShT + data$X2ShT)} & \Sexpr{min(data$X1ShT + data$X2ShT)} & \Sexpr{max(data$X1ShT + data$X2ShT)} \\
+\hline \\
+1st half corners(us) & \Sexpr{mean1(data$X1CU)} & \Sexpr{median1(data$X1CU)} & \Sexpr{sum(data$X1CU)} & \Sexpr{min(data$X1CU)} & \Sexpr{max(data$X1CU)} \\
+2nd half corners(us) & \Sexpr{mean1(data$X2CU)} & \Sexpr{median1(data$X2CU)} & \Sexpr{sum(data$X2CU)} & \Sexpr{min(data$X2CU)} & \Sexpr{max(data$X2CU)} \\
+Corners(us) & \Sexpr{mean1(data$X1CU + data$X2CU)} & \Sexpr{median1(data$X1CU + data$X2CU)} & \Sexpr{sum(data$X1CU + data$X2CU)} & \Sexpr{min(data$X1CU + data$X2CU)} & \Sexpr{max(data$X1CU + data$X2CU)} \\
+\hline \\
+1st half corners(them) & \Sexpr{mean1(data$X1CT)} & \Sexpr{median1(data$X1CT)} & \Sexpr{sum(data$X1CT)} & \Sexpr{min(data$X1CT)} & \Sexpr{max(data$X1CT)} \\
+2nd half corners(them) & \Sexpr{mean1(data$X2CT)} & \Sexpr{median1(data$X2CT)} & \Sexpr{sum(data$X2CT)} & \Sexpr{min(data$X2CT)} & \Sexpr{max(data$X2CT)} \\
+Corners(them) & \Sexpr{mean1(data$X1CT + data$X2CT)} & \Sexpr{median1(data$X1CT + data$X2CT)} & \Sexpr{sum(data$X1CT + data$X2CT)} & \Sexpr{min(data$X1CT + data$X2CT)} & \Sexpr{max(data$X1CT + data$X2CT)} \\
+\hline \\
+1st half saves(us) & \Sexpr{mean1(data$X1SaU)} & \Sexpr{median1(data$X1SaU)} & \Sexpr{sum(data$X1SaU)} & \Sexpr{min(data$X1SaU)} & \Sexpr{max(data$X1SaU)} \\
+2nd half saves(us) & \Sexpr{mean1(data$X2SaU)} & \Sexpr{median(data$X2SaU)} & \Sexpr{sum(data$X2SaU)} & \Sexpr{min(data$X2SaU)} & \Sexpr{max(data$X2SaU)} \\
+Saves(us) & \Sexpr{mean1(data$X1SaU + data$X2SaU)} & \Sexpr{median1(data$X1SaU + data$X2SaU)} & \Sexpr{sum(data$X1SaU + data$X2SaU)} & \Sexpr{min(data$X1SaU + data$X2SaU)} & \Sexpr{max(data$X1SaU + data$X2SaU)} \\
+\hline \\
+1st half saves(them) & \Sexpr{mean1(data$X1SaT)} & \Sexpr{median1(data$X1SaT)}  & \Sexpr{sum(data$X1SaT)} & \Sexpr{min(data$X1SaT)} & \Sexpr{max(data$X1SaT)} \\
+2nd half saves(them) & \Sexpr{mean1(data$X2SaT)} & \Sexpr{median1(data$X2SaT)} & \Sexpr{sum(data$X2SaT)} & \Sexpr{min(data$X2SaT)} & \Sexpr{max(data$X2SaT)} \\
+Saves(them) & \Sexpr{mean1(data$X1SaT + data$X2SaT)} & \Sexpr{median1(data$X1SaT + data$X2SaT)} & \Sexpr{sum(data$X1SaT + data$X2SaT)} & \Sexpr{min(data$X1SaT + data$X2SaT)} & \Sexpr{max(data$X1SaT +  data$X2SaT)} \\
+\hline \\
+\end{tabular}
+\end{table}
+Statistics are based on \textbf{\Sexpr{length(data$Opponent)}} games.
+With an overall record of 
+\textbf{\Sexpr{length(subset(data,data$X1GU + data$X2GU > data$X1GT + data$X2GT)$Opponent)}} wins, 
+\textbf{\Sexpr{length(subset(data,data$X1GU + data$X2GU < data$X1GT + data$X2GT)$Opponent)}} losses,
+and
+\textbf{\Sexpr{length(subset(data,data$X1GU + data$X2GU == data$X1GT + data$X2GT)$Opponent)}} draws.
+\pagebreak
+\section{Distributions}
+\subsection{Goals}
+<<echo=FALSE,fid.width=14,fig.height=11>>=
+par(mfrow=c(3,2))
+boxplot(data$X1GU,main='1st half goals us')
+boxplot(data$X1GT,main='1st half goals them')
+boxplot(data$X2GU,main='2nd half goals us')
+boxplot(data$X2GT,main='2nd half goals them')
+boxplot(data$X1GU + data$X2GU,main='Total goals us')
+boxplot(data$X1GT + data$X2GT,main='Total goals them')
+@
+\pagebreak
+\subsection{Shots}
+<<echo=FALSE,fid.width=12,fig.height=11>>=
+par(mfrow=c(3,2))
+boxplot(data$X1ShU,main='1st half shots us')
+boxplot(data$X1ShT,main='1st half shots them')
+boxplot(data$X2ShU,main='2nd half shots us')
+boxplot(data$X2ShT,main='2nd half shots them')
+boxplot(data$X1ShU + data$X2ShU,main='Total shots us')
+boxplot(data$X1ShT + data$X2ShT,main='Total shots them')
+@
+\pagebreak
+\subsection{Corners}
+<<echo=FALSE,fid.width=12,fig.height=11>>=
+par(mfrow=c(3,2))
+boxplot(data$X1CU,main='1st half corners us')
+boxplot(data$X1CT,main='1st half corners them')
+boxplot(data$X2CU,main='2nd half corners us')
+boxplot(data$X2CT,main='2nd half corners them')
+boxplot(data$X1CU + data$X2CU,main='Total corners us')
+boxplot(data$X1CT + data$X2CT,main='Total corners them')
+@
+\pagebreak
+\subsection{Saves}
+<<echo=FALSE,fid.width=12,fig.height=11>>=
+par(mfrow=c(3,2))
+boxplot(data$X1SaU,main='1st half saves us')
+boxplot(data$X1SaT,main='1st half saves them')
+boxplot(data$X2SaU,main='2nd half saves us')
+boxplot(data$X2SaT,main='2nd half saves them')
+boxplot(data$X1SaU + data$X2SaU,main='Total saves us')
+boxplot(data$X1SaT + data$X2SaT,main='Total saves them')
+@
+\pagebreak
+\section{Correlations}
+\subsection{Shots correlated with Goals}
+<<echo=FALSE,fid.width=12,fig.height=11>>=
+goalsU <- data$X1GU + data$X2GU
+shotsU <- data$X1ShU + data$X2ShU
+goalsT <- data$X1GT + data$X2GT
+shotsT <- data$X1ShT + data$X2ShT
+par(mfrow=c(2,1))
+l <- lm(goalsU ~ shotsU)
+ylabel <- paste('Goals R^2:',round(as.numeric(summary(l)[8]),digits=2))
+plot(shotsU,goalsU,main='Us',xlab='Shots',ylab=ylabel)
+abline(l)
+l <- lm(goalsT ~ shotsT)
+ylabel <- paste('Goals R^2:',round(as.numeric(summary(l)[8]),digits=2))
+plot(shotsT,goalsT,main='Them',xlab='Shots',ylab=ylabel)
+abline(l)
+@
+\pagebreak
+\subsection{Saves correlated with Shots}
+<<echo=FALSE,fid.width=12,fig.height=11>>=
+shotsU <- data$X1ShU + data$X2ShU
+shotsT <- data$X1ShT + data$X2ShT
+savesU <- data$X1SaU + data$X2SaU
+savesT <- data$X1SaT + data$X2SaT
+par(mfrow=c(2,1))
+l <- lm(savesU ~ shotsT)
+ylabel <- paste('Saves(Us) R^2:',round(as.numeric(summary(l)[8]),digits=2))
+plot(shotsT,savesU,main='Us',xlab='Shots(Them)',ylab=ylabel)
+abline(l)
+l <- lm(savesT ~ shotsU)
+ylabel <- paste('Saves(Them) R^2:',round(as.numeric(summary(l)[8]),digits=2))
+plot(shotsU,savesT,main='Them',xlab='Shots(Us)',ylab=ylabel)
+abline(l)
+@
+\pagebreak
+\subsection{Goals correlated with Corners}
+<<echo=FALSE,fid.width=12,fig.height=11>>=
+goalsU <- data$X1GU + data$X2GU
+goalsT <- data$X1GT + data$X2GT
+cornersU <- data$X1CU + data$X2CU
+cornersT <- data$X1CT + data$X2CT
+par(mfrow=c(2,1))
+l <- lm(goalsU ~ cornersU)
+ylabel <- paste('Goals(Us) R^2:',round(as.numeric(summary(l)[8]),digits=2))
+plot(cornersU,goalsU,main='Us',xlab='Goals',ylab=ylabel)
+abline(l)
+l <- lm(goalsT ~ cornersT)
+ylabel <- paste('Goals(Them) R^2:',round(as.numeric(summary(l)[8]),digits=2))
+plot(cornersT,goalsT,main='Them',xlab='Goals)',ylab=ylabel)
+abline(l)
+@
+\end{document}
