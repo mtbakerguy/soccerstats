@@ -24,14 +24,14 @@ The incoming data file--\textit{soccerstats.csv}--is found in this directory.
 data <- read.csv('soccerstats.csv')
 
 # helper function that plots our metric vs theirs
-plotit <- function(d_u,d_t,title,ylabel) {
+plotit <- function(d_u,d_t,title,ylabel,labels=data$Opponent) {
    par(mar=c(16,3.8,2,0.1))
    ylimit <- max(d_u,d_t)
    plot(d_u,main=title,ylab=ylabel,xaxt='n',
         xlab='',ylim=c(0,ylimit),col='blue',pch='U')
    par(new=TRUE)
    points(d_t,pch='T',col='red')
-   axis(1, at=1:length(d_u), labels=data$Opponent,las=2)
+   axis(1, at=1:length(d_u), labels=labels,las=2)
 } 
 @ 
 
@@ -70,6 +70,8 @@ Data dictionary for the \textit{CSV} file follows:
 \textbf{2SaT} & 2nd half saves them & whole number \textgreater= 0
 \end{tabular}
 \end{table}
+
+\textbf{NB:}  Since indoor soccer does not have corners, the \textit{CSV} file needs to be correctly edited for indoor games.  Indoor matches are removed from graphing and calculations when the \textit{Weather} column is set to \textit{Indoor} and if the 4 corner fields--\textit{1CU, 1CT, 2CU, and 2CT}--are set to empty.
 \pagebreak
 \section{Goals}
 \subsection{Halves}
@@ -128,14 +130,24 @@ f((data$X1GU + data$X2GU) / (data$X1ShU + data$X2ShU) * 100,
 \subsection{Halves}
 <<echo=FALSE,fig.height=11>>=
 par(mfrow=c(2,1))
-plotit(data$X1CU,data$X1CT,'1st half corners','Corners taken')
-plotit(data$X2CU,data$X2CT,'2nd half corners','Corners taken')
+plotit(data[data$Weather != 'Indoor',]$X1CU,
+       data[data$Weather != 'Indoor',]$X1CT,
+       '1st half corners','Corners taken',
+       data[data$Weather != 'Indoor',]$Opponent)
+plotit(data[data$Weather != 'Indoor',]$X2CU,
+       data[data$Weather != 'Indoor',]$X2CT,
+       '2nd half corners','Corners taken',
+       data[data$Weather != 'Indoor',]$Opponent)
 @ 
 \pagebreak
 \subsection{Total}
 <<echo=FALSE,fig.height=11>>=
-plotit(data$X1CU + data$X2CU,data$X1CT + data$X2CT,
-       'Corners','Corners taken')
+plotit(data[data$Weather != 'Indoor',]$X1CU + 
+       data[data$Weather != 'Indoor',]$X2CU,
+       data[data$Weather != 'Indoor',]$X1CT +
+       data[data$Weather != 'Indoor',]$X2CT,
+       'Corners','Corners taken',
+       data[data$Weather != 'Indoor',]$Opponent)
 @ 
 \pagebreak
 \section{Saves}
@@ -153,8 +165,8 @@ plotit(data$X1SaU + data$X2SaU,data$X1SaT + data$X2SaT,
 @
 \pagebreak
 <<echo=FALSE>>=
-mean1 <- function(data) round(mean(data),digits=1)
-median1 <- function(data) round(median(data),digits=1)
+mean1 <- function(data,narm=FALSE) round(mean(data,na.rm=narm),digits=1)
+median1 <- function(data,narm=FALSE) round(median(data,na.rm=narm),digits=1)
 @
 \pagebreak
 \section{Statistics}
@@ -178,13 +190,13 @@ Shots(us) & \Sexpr{mean1(data$X1ShU + data$X2ShU)} & \Sexpr{median1(data$X1ShU +
 2nd half shots(them) & \Sexpr{mean1(data$X2ShT)} & \Sexpr{median1(data$X2ShT)} & \Sexpr{sum(data$X2ShT)} & \Sexpr{min(data$X2ShT)} & \Sexpr{max(data$X2ShT)} \\
 Shots(them) & \Sexpr{mean1(data$X1ShT + data$X2ShT)} & \Sexpr{median1(data$X1ShT + data$X2ShT)} & \Sexpr{sum(data$X1ShT + data$X2ShT)} & \Sexpr{min(data$X1ShT + data$X2ShT)} & \Sexpr{max(data$X1ShT + data$X2ShT)} \\
 \hline \\
-1st half corners(us) & \Sexpr{mean1(data$X1CU)} & \Sexpr{median1(data$X1CU)} & \Sexpr{sum(data$X1CU)} & \Sexpr{min(data$X1CU)} & \Sexpr{max(data$X1CU)} \\
-2nd half corners(us) & \Sexpr{mean1(data$X2CU)} & \Sexpr{median1(data$X2CU)} & \Sexpr{sum(data$X2CU)} & \Sexpr{min(data$X2CU)} & \Sexpr{max(data$X2CU)} \\
-Corners(us) & \Sexpr{mean1(data$X1CU + data$X2CU)} & \Sexpr{median1(data$X1CU + data$X2CU)} & \Sexpr{sum(data$X1CU + data$X2CU)} & \Sexpr{min(data$X1CU + data$X2CU)} & \Sexpr{max(data$X1CU + data$X2CU)} \\
+1st half corners(us) & \Sexpr{mean1(data$X1CU,T)} & \Sexpr{median1(data$X1CU,T)} & \Sexpr{sum(data$X1CU,na.rm=T)} & \Sexpr{min(data$X1CU,na.rm=T)} & \Sexpr{max(data$X1CU,na.rm=T)} \\
+2nd half corners(us) & \Sexpr{mean1(data$X2CU,T)} & \Sexpr{median1(data$X2CU,T)} & \Sexpr{sum(data$X2CU,na.rm=T)} & \Sexpr{min(data$X2CU,na.rm=T)} & \Sexpr{max(data$X2CU,na.rm=T)} \\
+Corners(us) & \Sexpr{mean1(data$X1CU + data$X2CU,T)} & \Sexpr{median1(data$X1CU + data$X2CU,T)} & \Sexpr{sum(data$X1CU + data$X2CU,na.rm=T)} & \Sexpr{min(data$X1CU + data$X2CU,na.rm=T)} & \Sexpr{max(data$X1CU + data$X2CU,na.rm=T)} \\
 \hline \\
-1st half corners(them) & \Sexpr{mean1(data$X1CT)} & \Sexpr{median1(data$X1CT)} & \Sexpr{sum(data$X1CT)} & \Sexpr{min(data$X1CT)} & \Sexpr{max(data$X1CT)} \\
-2nd half corners(them) & \Sexpr{mean1(data$X2CT)} & \Sexpr{median1(data$X2CT)} & \Sexpr{sum(data$X2CT)} & \Sexpr{min(data$X2CT)} & \Sexpr{max(data$X2CT)} \\
-Corners(them) & \Sexpr{mean1(data$X1CT + data$X2CT)} & \Sexpr{median1(data$X1CT + data$X2CT)} & \Sexpr{sum(data$X1CT + data$X2CT)} & \Sexpr{min(data$X1CT + data$X2CT)} & \Sexpr{max(data$X1CT + data$X2CT)} \\
+1st half corners(them) & \Sexpr{mean1(data$X1CT,T)} & \Sexpr{median1(data$X1CT,T)} & \Sexpr{sum(data$X1CT,na.rm=T)} & \Sexpr{min(data$X1CT,na.rm=T)} & \Sexpr{max(data$X1CT,na.rm=T)} \\
+2nd half corners(them) & \Sexpr{mean1(data$X2CT,T)} & \Sexpr{median1(data$X2CT,T)} & \Sexpr{sum(data$X2CT,na.rm=T)} & \Sexpr{min(data$X2CT,na.rm=T)} & \Sexpr{max(data$X2CT,na.rm=T)} \\
+Corners(them) & \Sexpr{mean1(data$X1CT + data$X2CT,T)} & \Sexpr{median1(data$X1CT + data$X2CT,T)} & \Sexpr{sum(data$X1CT + data$X2CT,na.rm=T)} & \Sexpr{min(data$X1CT + data$X2CT,na.rm=T)} & \Sexpr{max(data$X1CT + data$X2CT,na.rm=T)} \\
 \hline \\
 1st half saves(us) & \Sexpr{mean1(data$X1SaU)} & \Sexpr{median1(data$X1SaU)} & \Sexpr{sum(data$X1SaU)} & \Sexpr{min(data$X1SaU)} & \Sexpr{max(data$X1SaU)} \\
 2nd half saves(us) & \Sexpr{mean1(data$X2SaU)} & \Sexpr{median(data$X2SaU)} & \Sexpr{sum(data$X2SaU)} & \Sexpr{min(data$X2SaU)} & \Sexpr{max(data$X2SaU)} \\
