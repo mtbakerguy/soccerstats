@@ -67,7 +67,8 @@ Data dictionary for the \textit{CSV} file follows:
 \textbf{1SaU} & 1st half saves us & whole number \textgreater= 0 \\
 \textbf{1SaT} & 1st half saves them & whole number \textgreater= 0 \\
 \textbf{2SaU} & 2nd half saves us & whole number \textgreater= 0 \\
-\textbf{2SaT} & 2nd half saves them & whole number \textgreater= 0
+\textbf{2SaT} & 2nd half saves them & whole number \textgreater= 0 \\
+\textbf{Addenda} & Any additional info & Freeform text
 \end{tabular}
 \end{table}
 
