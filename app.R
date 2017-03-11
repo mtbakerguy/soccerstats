@@ -1,4 +1,5 @@
-s <- read.csv('soccerstats.csv')
+require('RCurl')
+s <- read.csv(text=getURL('https://raw.githubusercontent.com/mtbakerguy/soccerstats/master/soccerstats.csv'))
 
 plotter <- function(firstU,secondU,firstT,secondT,metricname,plottype) {
    par(mfrow=c(2,3)) 
