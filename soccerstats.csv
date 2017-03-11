@@ -1,28 +1,28 @@
-Opponent,Date,Weather,GameType,Field,1GU,1GT,2GU,2GT,1ShU,1ShT,2ShU,2ShT,1CU,1CT,2CU,2CT,1SaU,1SaT,2SaU,2SaT,Addenda,
-FC Surge Edmonds,10-Jun-2016,Breezy and overcast,Tournament,Turf -- good condition,5,0,2,1,15,1,6,7,0,1,0,2,1,6,3,2,
-FPFC Fury Blk,11-Jun-2016,Windy and late rain,Tournament,Grass -- good condition,2,1,6,2,12,5,8,4,1,3,3,2,1,8,2,1,
-Highline FC,12-Jun-2016,Sunny w/mild breeze,Tournament,Turf -- good condition,4,0,4,0,19,0,15,3,1,0,2,1,0,8,1,4,
-Dragons FC,12-Jun-2016,Sunny w/mild breeze,Tournament,Turf -- good condition,1,1,0,4,1,7,2,11,0,4,0,3,6,0,6,1,
-North Shore,18-Jun-2016,Light Rain,Tournament,Grass -- good condition,2,3,4,2,4,6,5,5,2,1,3,2,2,1,3,0,
-Snohomish United,18-Jun-2016,Moderate Rain,Tournament,Grass -- good condition,1,1,4,1,7,8,16,2,0,0,3,1,4,3,1,5,
-Crossfire B05F,19-Jun-2016,Sunny,Tournament,Grass -- good condition,0,3,1,2,5,7,10,3,2,2,4,1,4,2,1,3,
-Eastside F.C.,21-Aug-2016,Sunny and breezy,Friendly,Turf -- good condition,0,4,3,6,0,10,5,14,1,4,1,4,5,0,4,1,
-MVP Rapids 06 Navy,03-Sep-2016,Overcast and dry,Tournament,Turf -- good condition,0,1,2,1,5,4,7,4,4,1,1,3,0,0,1,1,
-Crossfire Yakima,04-Sep-2016,Overcast and dry,Tournament,Turf -- good condition,0,5,0,3,1,14,2,11,0,6,1,5,8,1,6,2,
-Seattle United,04-Sep-2016,Sunny,Tournament,Grass -- good condition,4,0,2,2,15,4,8,3,5,3,3,5,2,6,1,4,
-Celtic FC,01-Oct-2016,Indoor,Friendly,Turf -- good condition,5,11,3,3,13,15,9,10,,,,,3,7,5,2,
-FC Rush,15-Oct-2016,Indoor,Friendly,Turf -- good condition,5,0,6,2,25,2,25,7,,,,,2,10,4,13,
-TdoubleA,22-Oct-2016,Indoor,Friendly,Turf -- good condition,3,6,2,5,5,12,4,12,,,,,3,1,7,2,
-Monroe Cobras U-13,08-Nov-2016,Indoor,League,Turf -- good condition,1,2,2,5,17,10,12,11,,,,,5,10,4,7,
-Velocity FC U-13,13-Nov-2016,Indoor,League,Turf -- good condition,3,2,6,3,14,4,13,4,,,,,1,6,0,5,
-Grizzles,20-Nov-2016,Indoor,League,Turf -- good condition,5,4,3,6,13,7,8,13,,,,,3,7,2,3,
-Velocity FC U-13,27-Nov-2016,Indoor,League,Turf -- good condition,5,3,4,1,12,3,18,9,,,,,0,4,10,9,
-Grizzles,04-Dec-2016,Indoor,League,Turf -- good condition,4,2,4,5,10,8,9,15,,,,,4,5,4,3,
-WS United Slackza,11-Dec-2016,Indoor,League,Turf -- good condition,4,4,3,3,8,11,11,11,,,,,4,3,3,3,Keep #2 from scoring
-Grizzlies,20-Jan-2017,Indoor,League,Turf -- good condition,1,2,4,3,11,2,15,9,,,,,0,9,3,7,
-One Direction,29-Jan-2017,Indoor,League,Turf -- good condition,5,2,2,4,12,10,4,6,,,,,7,7,2,1,
-Monroe Cobras,05-Feb-2017,Indoor,League,Turf -- good condition,4,1,3,3,8,7,3,8,0,0,0,0,4,3,4,0,
-Funky Bunch,13-Feb-2017,Indoor,League,Turf -- good condition,4,3,3,6,12,8,7,8,0,0,0,0,6,8,2,4,
-Velocity FC U-13,18-Feb-2017,Indoor,League,Turf -- good condition,2,2,1,5,8,3,6,8,0,0,0,0,0,4,4,3,
-Funky Bunch,26-Feb-2017,Indoor,League,Turf -- good condition,3,0,6,3,7,7,10,7,0,0,0,0,6,4,4,4,
-Cascade FC,05-Mar-2017,Indoor,League,Turf -- good condition,2,1,4,3,15,7,15,7,0,0,0,0,5,7,3,2,#31 scoring threat
+Opponent,Date,Weather,GameType,Field,1GU,1GT,2GU,2GT,1ShU,1ShT,2ShU,2ShT,1CU,1CT,2CU,2CT,1SaU,1SaT,2SaU,2SaT
+FC Surge Edmonds,10-Jun-2016,Breezy and overcast,Tournament,Turf -- good condition,5,0,2,1,15,1,6,7,0,1,0,2,1,6,3,2
+FPFC Fury Blk,11-Jun-2016,Windy and late rain,Tournament,Grass -- good condition,2,1,6,2,12,5,8,4,1,3,3,2,1,8,2,1
+Highline FC,12-Jun-2016,Sunny w/mild breeze,Tournament,Turf -- good condition,4,0,4,0,19,0,15,3,1,0,2,1,0,8,1,4
+Dragons FC,12-Jun-2016,Sunny w/mild breeze,Tournament,Turf -- good condition,1,1,0,4,1,7,2,11,0,4,0,3,6,0,6,1
+North Shore,18-Jun-2016,Light Rain,Tournament,Grass -- good condition,2,3,4,2,4,6,5,5,2,1,3,2,2,1,3,0
+Snohomish United,18-Jun-2016,Moderate Rain,Tournament,Grass -- good condition,1,1,4,1,7,8,16,2,0,0,3,1,4,3,1,5
+Crossfire B05F,19-Jun-2016,Sunny,Tournament,Grass -- good condition,0,3,1,2,5,7,10,3,2,2,4,1,4,2,1,3
+Eastside F.C.,21-Aug-2016,Sunny and breezy,Friendly,Turf -- good condition,0,4,3,6,0,10,5,14,1,4,1,4,5,0,4,1
+MVP Rapids 06 Navy,03-Sep-2016,Overcast and dry,Tournament,Turf -- good condition,0,1,2,1,5,4,7,4,4,1,1,3,0,0,1,1
+Crossfire Yakima,04-Sep-2016,Overcast and dry,Tournament,Turf -- good condition,0,5,0,3,1,14,2,11,0,6,1,5,8,1,6,2
+Seattle United,04-Sep-2016,Sunny,Tournament,Grass -- good condition,4,0,2,2,15,4,8,3,5,3,3,5,2,6,1,4
+Celtic FC,01-Oct-2016,Indoor,Friendly,Turf -- good condition,5,11,3,3,13,15,9,10,,,,,3,7,5,2
+FC Rush,15-Oct-2016,Indoor,Friendly,Turf -- good condition,5,0,6,2,25,2,25,7,,,,,2,10,4,13
+TdoubleA,22-Oct-2016,Indoor,Friendly,Turf -- good condition,3,6,2,5,5,12,4,12,,,,,3,1,7,2
+Monroe Cobras U-13,08-Nov-2016,Indoor,League,Turf -- good condition,1,2,2,5,17,10,12,11,,,,,5,10,4,7
+Velocity FC U-13,13-Nov-2016,Indoor,League,Turf -- good condition,3,2,6,3,14,4,13,4,,,,,1,6,0,5
+Grizzles,20-Nov-2016,Indoor,League,Turf -- good condition,5,4,3,6,13,7,8,13,,,,,3,7,2,3
+Velocity FC U-13,27-Nov-2016,Indoor,League,Turf -- good condition,5,3,4,1,12,3,18,9,,,,,0,4,10,9
+Grizzles,04-Dec-2016,Indoor,League,Turf -- good condition,4,2,4,5,10,8,9,15,,,,,4,5,4,3
+WS United Slackza,11-Dec-2016,Indoor,League,Turf -- good condition,4,4,3,3,8,11,11,11,,,,,4,3,3,3
+Grizzlies,20-Jan-2017,Indoor,League,Turf -- good condition,1,2,4,3,11,2,15,9,,,,,0,9,3,7
+One Direction,29-Jan-2017,Indoor,League,Turf -- good condition,5,2,2,4,12,10,4,6,,,,,7,7,2,1
+Monroe Cobras,05-Feb-2017,Indoor,League,Turf -- good condition,4,1,3,3,8,7,3,8,,,,,4,3,4,0
+Funky Bunch,13-Feb-2017,Indoor,League,Turf -- good condition,4,3,3,6,12,8,7,8,,,,,6,8,2,4
+Velocity FC U-13,18-Feb-2017,Indoor,League,Turf -- good condition,2,2,1,5,8,3,6,8,,,,,0,4,4,3
+Funky Bunch,26-Feb-2017,Indoor,League,Turf -- good condition,3,0,6,3,7,7,10,7,,,,,6,4,4,4
+Cascade FC,05-Mar-2017,Indoor,League,Turf -- good condition,2,1,4,3,15,7,15,7,,,,,5,7,3,2
