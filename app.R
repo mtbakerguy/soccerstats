@@ -19,7 +19,6 @@ plotter <- function(firstU,secondU,firstT,secondT,metricname,plottype) {
    } else if(plottype == 3) {
        par(mfrow=c(3,1))
        ylimit <- max(na.omit(firstU),na.omit(firstT))
-       print(ylimit)
        plot(na.omit(firstU),main=paste('First Half',metricname),col='blue',pch='U',ylim=c(0,ylimit),
             xaxt='n',xlab='',ylab='Count')
        par(new=TRUE)
@@ -30,7 +29,6 @@ plotter <- function(firstU,secondU,firstT,secondT,metricname,plottype) {
        par(new=TRUE)
        points(na.omit(secondT),pch='T',col='red')
        ylimit <- max(na.omit(firstU) + na.omit(secondU),na.omit(firstT) + na.omit(secondT))
-       print(ylimit)
        plot(na.omit(firstU) + na.omit(secondU),main=paste('Total',metricname),col='blue',pch='U',ylim=c(0,ylimit),
             xaxt='n',xlab='',ylab='Count')
        par(new=TRUE)
