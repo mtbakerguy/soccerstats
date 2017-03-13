@@ -36,8 +36,9 @@ plotter <- function(firstU,secondU,firstT,secondT,metricname,plottype) {
        points(na.omit(secondU) + na.omit(secondT),pch='T',col='red')
    }
 }
+
 server <- function(input, output) {
-  output$value <- renderPlot({
+    output$plots <- renderPlot({
     d <- input$checkGroup
     if(d == 1)
         plotter(s[,'X1GU'],s[,'X2GU'],s[,'X1GT'],s[,'X2GT'],'Goals',input$plotType)
@@ -47,19 +48,48 @@ server <- function(input, output) {
         plotter(s[,'X1SaU'],s[,'X2SaU'],s[,'X1SaT'],s[,'X2SaT'],'Saves',input$plotType)
     else 
         plotter(s[,'X1CU'],s[,'X2CU'],s[,'X1CT'],s[,'X2CT'],'Corners',input$plotType)
-  })
+    })
+
+    output$text <- renderPrint({
+        d <- input$checkGroup
+
+        summarizeIt <- function(offset1,offset2,name) {
+            q <- s[offset1:offset2]
+            q$TU <- q[,1] + q[,3]
+            q$TT <- q[,2] + q[,4]
+            
+            names(q) <- c(paste('First Half ',name,'(Us)',sep=''),
+                          paste('First Half ',name,'(Them)',sep=''),
+                          paste('Second Half ',name,'(Us)',sep=''),
+                          paste('Second Half ',name,'(Them)',sep=''),
+                          paste('Total ',name,'(Us)',sep=''),
+                          paste('Total ',name,'(Them)',sep=''))
+            summary(q)
+        }
+        if(d == 1)
+            summarizeIt(6,9,'Goals')
+        else if(d == 2)
+            summarizeIt(10,13,'Shots')
+        else if(d == 3)
+            summarizeIt(18,21,'Saves')
+        else
+            summarizeIt(14,17,'Corners')
+    })
 }
 
 ui <- fluidPage(
   titlePanel('WFA Soccer statistics'),
   sidebarLayout(
       sidebarPanel(radioButtons("plotType",label=h3("Select display type:"),
-                       choices=list("Histogram" = 1,"Boxplot" = 2,'Game plots' = 3),
+                       choices=list("Histogram" = 1,"Boxplot" = 2,'Game plots' = 3,
+                                    "Summary Stats" = 4),
                        selected=1),
                    radioButtons("checkGroup",label=h3("Select metric to display:"),
                        choices=list("Goals" = 1,'Shots' = 2,'Saves' = 3,'Corners' = 4),
                        selected=1)),
-  mainPanel(plotOutput("value")))
+      mainPanel(
+          plotOutput("plots"),
+          verbatimTextOutput("text")))
 )
 
 shinyApp(ui = ui, server = server)
