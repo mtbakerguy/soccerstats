@@ -1,5 +1,7 @@
 require('RCurl')
 s <- read.csv(text=getURL('https://raw.githubusercontent.com/mtbakerguy/soccerstats/master/soccerstats.csv'))
+startDate <- as.Date(s[1,]$Date,format='%d-%b-%Y')
+endDate <- as.Date(s[nrow(s),]$Date,format='%d-%b-%Y')
 
 plotter <- function(firstU,secondU,firstT,secondT,metricname,plottype) {
    par(mfrow=c(2,3)) 
@@ -40,21 +42,29 @@ plotter <- function(firstU,secondU,firstT,secondT,metricname,plottype) {
 server <- function(input, output) {
     output$plots <- renderPlot({
     d <- input$checkGroup
+    start <- input$daterange[1]
+    end <- input$daterange[2]
+    #sprime <- s[as.Date(s$Date,format='%d-%b-%Y') >= start & as.Date(s$Date,format='%d-%b-%Y) <= end,]
+    sprime <- s[as.Date(s$Date,format='%d-%b-%Y') >= start & as.Date(s$Date,format='%d-%b-%Y') <= end,]
+    
     if(d == 1)
-        plotter(s[,'X1GU'],s[,'X2GU'],s[,'X1GT'],s[,'X2GT'],'Goals',input$plotType)
+        plotter(sprime[,'X1GU'],sprime[,'X2GU'],sprime[,'X1GT'],sprime[,'X2GT'],'Goals',input$plotType)
     else if(d == 2)
-        plotter(s[,'X1ShU'],s[,'X2ShU'],s[,'X1ShT'],s[,'X2ShT'],'Shots',input$plotType)
+        plotter(s[,'X1ShU'],s[,'X2ShU'],sprime[,'X1ShT'],sprime[,'X2ShT'],'Shots',input$plotType)
     else if(d == 3)
-        plotter(s[,'X1SaU'],s[,'X2SaU'],s[,'X1SaT'],s[,'X2SaT'],'Saves',input$plotType)
+        plotter(sprime[,'X1SaU'],sprime[,'X2SaU'],sprime[,'X1SaT'],sprime[,'X2SaT'],'Saves',input$plotType)
     else 
-        plotter(s[,'X1CU'],s[,'X2CU'],s[,'X1CT'],s[,'X2CT'],'Corners',input$plotType)
+        plotter(sprime[,'X1CU'],sprime[,'X2CU'],sprime[,'X1CT'],sprime[,'X2CT'],'Corners',input$plotType)
     })
 
     output$text <- renderPrint({
         d <- input$checkGroup
 
         summarizeIt <- function(offset1,offset2,name) {
-            q <- s[offset1:offset2]
+            start <- input$daterange[1]
+            end <- input$daterange[2]
+            sprime <- s[as.Date(s$Date,format='%d-%b-%Y') >= start & as.Date(s$Date,format='%d-%b-%Y') <= end,]
+            q <- sprime[offset1:offset2]
             q$TU <- q[,1] + q[,3]
             q$TT <- q[,2] + q[,4]
             
@@ -86,7 +96,8 @@ ui <- fluidPage(
                        selected=1),
                    radioButtons("checkGroup",label=h3("Select metric to display:"),
                        choices=list("Goals" = 1,'Shots' = 2,'Saves' = 3,'Corners' = 4),
-                       selected=1)),
+                       selected=1),
+                   dateRangeInput('daterange','Date range:',start=startDate,end=endDate)),
       mainPanel(
           plotOutput("plots"),
           verbatimTextOutput("text")))
