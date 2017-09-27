@@ -1,5 +1,6 @@
 require('RCurl')
-s <- read.csv(text=getURL('https://raw.githubusercontent.com/mtbakerguy/soccerstats/master/soccerstats.csv'))
+#s <- read.csv(text=getURL('https://raw.githubusercontent.com/mtbakerguy/soccerstats/master/soccerstats.csv'))
+s <- read.csv('soccerstats.csv')
 startDate <- as.Date(s[1,]$Date,format='%d-%b-%Y')
 endDate <- as.Date(s[nrow(s),]$Date,format='%d-%b-%Y')
 
